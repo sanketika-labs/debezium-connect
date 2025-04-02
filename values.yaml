@@ -11,13 +11,34 @@ image:
   tag: 3.0.0.Final
   pullPolicy: IfNotPresent
 
+kafka:
+  ssl:
+    enabled: false
+
 env:
   GROUP_ID: 01544
   CONFIG_STORAGE_TOPIC: debezium-connect-config
   OFFSET_STORAGE_TOPIC: debezium-connect-offset
   STATUS_STORAGE_TOPIC: debezium-connect-status
   BOOTSTRAP_SERVERS: 192.168.106.1:9092
-  OFFSET_FLUSH_INTERVAL_MS: 60000
+  CONNECT_SECURITY_PROTOCOL: SSL
+  CONNECT_SSL_TRUSTSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_SSL_TRUSTSTORE_PASSWORD: "<truststore_password>"
+  CONNECT_SSL_KEYSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_SSL_KEYSTORE_PASSWORD: "<keystore_password>"
+  CONNECT_PRODUCER_SECURITY_PROTOCOL: SSL
+  CONNECT_PRODUCER_SSL_TRUSTSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_PRODUCER_SSL_TRUSTSTORE_PASSWORD: "<truststore_password>"
+  CONNECT_PRODUCER_SSL_KEYSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_PRODUCER_SSL_KEYSTORE_PASSWORD: "<keystore_password>"
+  CONNECT_CONSUMER_SECURITY_PROTOCOL: SSL
+  CONNECT_CONSUMER_SSL_TRUSTSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_CONSUMER_SSL_TRUSTSTORE_PASSWORD: "<truststore_password>"
+  CONNECT_CONSUMER_SSL_KEYSTORE_LOCATION: "/var/private/ssl/kafka.client.truststore.jks"
+  CONNECT_CONSUMER_SSL_KEYSTORE_PASSWORD: "<keystore_password>"
+  CONNECT_MAX_BATCH_SIZE: 32768
+  OFFSET_FLUSH_INTERVAL_MS: 10000
+  OFFSET_FLUSH_TIMEOUT_MS: 60000
   HEAP_OPTS: "-Xms256M -Xmx1G"
   LOG_LEVEL: INFO
 

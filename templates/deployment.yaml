@@ -46,9 +46,11 @@ spec:
           #   httpGet:
           #     path: /
           #     port: http
+          {{- if .Values.kafka.ssl.enabled }}
           volumeMounts:
           - mountPath: /var/private/ssl/
             name: kafka-ssl-certificates
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -56,11 +58,13 @@ spec:
             - name: {{ $env_key }}
               value: "{{ $env_value }}"
             {{- end }}
+      {{- if .Values.kafka.ssl.enabled }}
       volumes:
       - configMap:
           defaultMode: 420
           name: kafka-certificates
         name: kafka-ssl-certificates
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
