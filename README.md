@@ -103,7 +103,24 @@ curl --request POST \
     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable": "false",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable": "false"
+    "value.converter.schemas.enable": "false",
+    "transforms": "publictable1,publictable2",
+    "transforms.publictable1.type": "io.debezium.transforms.partitions.PartitionRouting",
+    "transforms.publictable1.partition.topic.num": 2,
+    "transforms.publictable1.partition.payload.fields": "id",
+    "transforms.publictable1.predicate": "table1",
+    "transforms.publictable2.type": "io.debezium.transforms.partitions.PartitionRouting",
+    "transforms.publictable2.partition.topic.num": 2,
+    "transforms.publictable2.partition.payload.fields": "dept_id",
+    "transforms.publictable2.predicate": "table2",
+    "predicates": "table1, table2",
+    "predicates.table1.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+    "predicates.table1.pattern": "debezium.public.table1",
+    "predicates.table2.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+    "predicates.table2.pattern": "debezium.public.table2",
+    "topic.create.enable": true,
+    "topic.creation.default.partitions": 2,
+    "topic.creation.default.replication.factor": 1
   }
 }'
 ```
