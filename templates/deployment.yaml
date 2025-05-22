@@ -38,19 +38,14 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          {{- if .Values.kafka.ssl.enabled }}
           volumeMounts:
-          - mountPath: /var/private/ssl/
-            name: kafka-ssl-certificates
-          {{- end }}
+            {{- if .Values.kafka.ssl.enabled }}
+            - mountPath: /var/private/ssl/
+              name: kafka-ssl-certificates
+            {{- end }}
+            - mountPath: /kafka/connect/log4j.properties
+              name: log4j-config
+              subPath: log4j.properties
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -58,13 +53,20 @@ spec:
             - name: {{ $env_key }}
               value: "{{ $env_value }}"
             {{- end }}
-      {{- if .Values.kafka.ssl.enabled }}
       volumes:
-      - configMap:
-          defaultMode: 420
-          name: kafka-certificates
-        name: kafka-ssl-certificates
-      {{- end }}
+        {{- if .Values.kafka.ssl.enabled }}
+        - configMap:
+            defaultMode: 420
+            name: kafka-certificates
+          name: kafka-ssl-certificates
+        {{- end }}
+        - name: log4j-config
+          configMap:
+            name: {{ include "debezium-connect.fullname" . }}-log4j
+            defaultMode: 0644
+            items:
+              - key: log4j_properties
+                path: log4j.properties
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "debezium-connect.fullname" . }}-log4j
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "debezium-connect.labels" . | nindent 4 }}
+data:
+  {{- "log4j_properties" | nindent 2 -}}: |-
+{{ .Values.log4j_properties | indent 4 }} 

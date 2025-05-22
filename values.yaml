@@ -40,7 +40,17 @@ env:
   OFFSET_FLUSH_INTERVAL_MS: 10000
   OFFSET_FLUSH_TIMEOUT_MS: 60000
   HEAP_OPTS: "-Xms256M -Xmx1G"
-  LOG_LEVEL: INFO
+
+
+log4j_properties: |+
+  log4j.rootLogger=INFO, stdout
+  log4j.logger.io.debezium.connector.postgresql=DEBUG
+  log4j.logger.io.debezium.connector.postgresql.TypeRegistry=ERROR
+  log4j.logger.org.apache.kafka.clients=ERROR
+
+  log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+  log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+  log4j.appender.stdout.layout.ConversionPattern=%d [%t] %-5p %c - %m%n
 
 imagePullSecrets: []
 nameOverride: ""
